@@ -1,33 +1,38 @@
 # Maintainer: philomath <philomath868 AT gmail DOT com>
 # Contributor: Roberto Alsina <ralsina@kde.org>
+# Contributor: Josh VanderLinden <arch@cloudlery.com>
 pkgname=skalibs
 pkgver=1.4.2
-pkgrel=2
+pkgrel=3
 pkgdesc="A general-purpose utility library for secure, small C development"
-url="http://www.skarnet.org/software/skalibs/"
+url="http://www.skarnet.org/software/${pkgname}/"
 license=('ISC')
-depends=()
-makedepends=()
 arch=('i686' 'x86_64')
-install=
-source=(http://www.skarnet.org/software/skalibs/$pkgname-$pkgver.tar.gz)
+source=(http://www.skarnet.org/software/${pkgname}/${pkgname}-${pkgver}.tar.gz)
 md5sums=('e2bfa4447977024e1f2f91e9eb880baa')
 
 build() {
-  cd $srcdir/prog/$pkgname-$pkgver
+  cd ${srcdir}/prog/${pkgname}-${pkgver}
   package/compile
 }
 
 package() {
-  cd $srcdir/prog/$pkgname-$pkgver
+  cd ${srcdir}/prog/${pkgname}-${pkgver}
 
-  install -d $pkgdir/usr/lib/skalibs/sysdeps
-  install -d $pkgdir/usr/include/skalibs
+  for i in package/*.exported
+  do
+    case $(basename ${i} ) in
+      library.so.exported) d=lib                        ;;
+      include.exported)    d=usr/include/${pkgname}     ;;
+      library.exported)    d=usr/lib/${pkgname}         ;;
+      sysdeps.exported)    d=usr/lib/${pkgname}/sysdeps ;;
+      command.exported)    d=usr/libexec/${pkgname}     ;;
+    esac
+    f=$(basename ${i} | sed 's/.exported//')
 
-  install -m0644 sysdeps/* $pkgdir/usr/lib/skalibs/sysdeps
-  install -m0644 library/* $pkgdir/usr/lib/skalibs
-  install -m0644 library.so/* $pkgdir/usr/lib/skalibs
-  install -m0644 include/* $pkgdir/usr/include/skalibs
+    mkdir -p ${pkgdir}/${d}
+    install $(sed s,^,${f}/, ${i}) "${pkgdir}/${d}"
+  done
 
-  install -Dm644 doc/COPYING $pkgdir/usr/share/licenses/$pkgname/LICENSE
+  install -Dm644 doc/COPYING ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
 }
