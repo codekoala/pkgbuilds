@@ -1,0 +1,33 @@
+# Maintainer: philomath <philomath868 AT gmail DOT com>
+# Contributor: Roberto Alsina <ralsina@kde.org>
+pkgname=skalibs
+pkgver=1.4.2
+pkgrel=2
+pkgdesc="A general-purpose utility library for secure, small C development"
+url="http://www.skarnet.org/software/skalibs/"
+license=('ISC')
+depends=()
+makedepends=()
+arch=('i686' 'x86_64')
+install=
+source=(http://www.skarnet.org/software/skalibs/$pkgname-$pkgver.tar.gz)
+md5sums=('e2bfa4447977024e1f2f91e9eb880baa')
+
+build() {
+  cd $srcdir/prog/$pkgname-$pkgver
+  package/compile
+}
+
+package() {
+  cd $srcdir/prog/$pkgname-$pkgver
+
+  install -d $pkgdir/usr/lib/skalibs/sysdeps
+  install -d $pkgdir/usr/include/skalibs
+
+  install -m0644 sysdeps/* $pkgdir/usr/lib/skalibs/sysdeps
+  install -m0644 library/* $pkgdir/usr/lib/skalibs
+  install -m0644 library.so/* $pkgdir/usr/lib/skalibs
+  install -m0644 include/* $pkgdir/usr/include/skalibs
+
+  install -Dm644 doc/COPYING $pkgdir/usr/share/licenses/$pkgname/LICENSE
+}
