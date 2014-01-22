@@ -1,0 +1,58 @@
+# Maintainer: Josh VanderLinden <arch@cloudlery.com>
+pkgname=(
+  python-astpp-hg
+  python2-astpp-hg
+)
+pkgver=r21.c0b021418bf7
+pkgrel=1
+pkgdesc="Pretty-printer for Python ASTs"
+arch=('any')
+url="https://bitbucket.org/takluyver/greentreesnakes/"
+license=('unknown')
+depends=('python')
+makedepends=('mercurial')
+
+_hgroot=https://bitbucket.org/takluyver/greentreesnakes
+_hgrepo=gts
+
+pkgver() {
+  cd "$srcdir/$_hgrepo-build"
+  printf "r%s.%s" "$(hg identify -n)" "$(hg identify -i)"
+}
+
+build() {
+  cd "$srcdir"
+  msg "Connecting to Mercurial server...."
+
+  if [[ -d "$_hgrepo" ]]; then
+    cd "$_hgrepo"
+    hg pull -u
+    msg "The local files are updated."
+  else
+    hg clone "$_hgroot" "$_hgrepo"
+  fi
+
+  msg "Mercurial checkout done or server timeout"
+  msg "Starting build..."
+
+  rm -rf "$srcdir/$_hgrepo-build"
+  cp -r "$srcdir/$_hgrepo" "$srcdir/$_hgrepo-build"
+  cd "$srcdir/$_hgrepo-build"
+}
+
+_inst() {
+  local _sp=$(${1} -c 'import site; print(site.getsitepackages()[0])' )
+
+  msg "Copying to ${_sp}"
+  install -Dm644 ${_hgrepo}-build/astpp.py ${pkgdir}/${_sp}/astpp.py
+}
+
+package_python-astpp-hg() {
+  _inst python
+}
+
+package_python2-astpp-hg() {
+  _inst python2
+}
+
+# vim:set ts=2 sw=2 et:
