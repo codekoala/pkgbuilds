@@ -1,0 +1,35 @@
+# Maintainer: Josh VanderLinden <arch@cloudlery.com>
+pkgname=(
+  python-pyfirmata
+  python2-pyfirmata
+)
+pkgver=0.9.5
+pkgrel=1
+pkgdesc="Python interface for the Firmata procotol"
+arch=('any')
+url="https://github.com/tino/pyFirmata"
+license=('MIT')
+source=("https://pypi.python.org/packages/source/p/pyFirmata/pyFirmata-${pkgver}.tar.gz")
+md5sums=("6f9e9a617ffb904c6eb4f5b4696790db")
+
+
+_inst() {
+  depends=("${1}" "${1}-pyserial")
+
+  cd ${srcdir}/pyFirmata-${pkgver}
+
+  ${1} setup.py install --root="${pkgdir}/" --optimize=1
+
+  install -Dm644 LICENSE ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
+}
+
+package_python-pyfirmata() {
+  2to3 -w ${srcdir}/pyFirmata-${pkgver}
+  _inst python
+}
+
+package_python2-pyfirmata() {
+  _inst python2
+}
+
+# vim:set ts=2 sw=2 et:
