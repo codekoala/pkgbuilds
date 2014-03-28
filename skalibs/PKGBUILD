@@ -2,14 +2,14 @@
 # Contributor: Roberto Alsina <ralsina@kde.org>
 # Contributor: Josh VanderLinden <arch@cloudlery.com>
 pkgname=skalibs
-pkgver=1.4.2
-pkgrel=3
+pkgver=1.5.1
+pkgrel=1
 pkgdesc="A general-purpose utility library for secure, small C development"
 url="http://www.skarnet.org/software/${pkgname}/"
 license=('ISC')
 arch=('i686' 'x86_64')
 source=(http://www.skarnet.org/software/${pkgname}/${pkgname}-${pkgver}.tar.gz)
-md5sums=('e2bfa4447977024e1f2f91e9eb880baa')
+md5sums=('1000d8d02ced5bb9c12efca5a8304830')
 
 build() {
   cd ${srcdir}/prog/${pkgname}-${pkgver}
