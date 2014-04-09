@@ -1,4 +1,5 @@
 # Maintainer: Vincent Demeester <vincent@sbr.io>
+# Contributor: Josh VanderLinden <arch@cloudlery.com>
 python=python2
 
 pkgname=fig
