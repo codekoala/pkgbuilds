@@ -1,0 +1,33 @@
+# Maintainer: Josh VanderLinden <arch@cloudlery.com>
+_base=pypiserver
+pkgname=(
+  python-${_base}
+  python2-${_base}
+)
+pkgver=1.1.6
+pkgrel=1
+pkgdesc="Minimal pypi server"
+arch=('any')
+url="https://github.com/schmir/pypiserver"
+license=('BSD')
+source=("https://pypi.python.org/packages/source/p/${_base}/${_base}-${pkgver}.zip")
+md5sums=('7b7ad55de1c858c19062c465d8607870')
+
+_inst() {
+  depends=("${1}" "${1}-setuptools")
+
+  cd ${_base}-${pkgver}/
+  ${1} setup.py install --optimize 1 --root "${pkgdir}/"
+}
+
+package_python-pypiserver() {
+  _inst python
+}
+
+package_python2-pypiserver() {
+  _inst python2
+
+  mv ${pkgdir}/usr/bin/pypi-server{,2}
+}
+
+# vim:set ts=2 sw=2 et:
