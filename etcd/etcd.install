@@ -1,0 +1,11 @@
+post_install() {
+    # create an etcd user
+    id -u etcd &>/dev/null || useradd -r -M -U -d /dev/null -s /bin/nologin etcd
+
+    # update the ownership of the data directory
+    chown -R etcd:etcd /var/lib/etcd
+}
+
+post_upgrade() {
+    post_install
+}

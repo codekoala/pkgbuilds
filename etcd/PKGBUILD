@@ -1,0 +1,43 @@
+# Maintainer: xeross <contact@xeross.me>
+# Contributor: Josh VanderLinden <arch@cloudlery.com>
+
+pkgname=etcd
+pkgver=0.3.0
+pkgrel=2
+pkgdesc="A highly-available key value store for shared configuration and service discovery"
+arch=('x86_64' 'i686')
+url="http://coreos.com/docs/etcd/"
+license=('Apache')
+depends=()
+makedepends=('git' 'go')
+source=(
+   "${pkgname}::git://github.com/coreos/etcd.git#tag=v${pkgver}"
+   "${pkgname}ctl::git://github.com/coreos/etcdctl.git#tag=v${pkgver}"
+   "./etcd.service"
+)
+install=etcd.install
+sha256sums=('SKIP'
+            'SKIP'
+            '549f1984e35852459d982f827a90d09896b993c28287de97b5cfbf509cecb55e')
+
+build() {
+  cd "$srcdir/$pkgname/"
+  ./build
+
+  cd "$srcdir/etcdctl/"
+  ./build
+}
+
+package() {
+  # make data directory
+  install -dm755 "${pkgdir}/var/lib/etcd"
+
+  # install binaries
+  install -D -m 755 "${srcdir}/etcd/bin/etcd" "$pkgdir/usr/bin/etcd"
+  install -D -m 755 "${srcdir}/etcdctl/bin/etcdctl" "$pkgdir/usr/bin/etcdctl"
+
+  # install service
+  install -Dm644 "${srcdir}/etcd.service" "${pkgdir}/usr/lib/systemd/system/etcd.service"
+}
+
+# vim:set ts=2 sw=2 et:
