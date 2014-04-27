@@ -1,0 +1,33 @@
+# Maintainer: Josh VanderLinden <arch@cloudlery.com>
+_base=etcd
+pkgname=(
+  python-${_base}
+  python2-${_base}
+)
+pkgver=0.3.0
+pkgrel=1
+pkgdesc="Python client for Etcd"
+arch=('any')
+url="http://github.com/jplana/python-etcd"
+license=('MIT')
+source=("https://pypi.python.org/packages/source/p/python-${_base}/python-${_base}-${pkgver}.tar.gz")
+md5sums=('15fad7817adef40d41eea87f9f965d92')
+
+_inst() {
+  depends=("${1}" "${1}-setuptools" "${1}-urllib3" "${1}-pyopenssl")
+
+  cd python-${_base}-${pkgver}/
+  ${1} setup.py install --optimize 1 --root "${pkgdir}/"
+
+  install -Dm644 ../../LICENSE ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
+}
+
+package_python-etcd() {
+  _inst python
+}
+
+package_python2-etcd() {
+  _inst python2
+}
+
+# vim:set ts=2 sw=2 et:
