@@ -2,7 +2,7 @@
 # Contributor: Andy Weidenbaum <archbaum@gmail.com>
 
 pkgname=salt-vim-git
-pkgver=r22.e0e7d4d
+pkgver=r36.82b26cc
 pkgrel=1
 pkgdesc="Vim files for editing Salt files"
 arch=('any')
@@ -32,10 +32,14 @@ prepare() {
 package() {
   cd ${pkgname%-git}
 
+  install -d ${pkgdir}/usr/share/licenses/${pkgname}
+
   msg 'Installing...'
   install -dm 755 ${pkgdir}/usr/share/vim/vimfiles/
   tar -c . | tar -x -C ${pkgdir}/usr/share/vim/vimfiles
 
   msg 'Cleaning up pkgdir...'
   find "$pkgdir" -type d -name .git -exec rm -r '{}' +
+
+  mv ${pkgdir}/usr/share/vim/vimfiles/LICENSE ${pkgdir}/usr/share/licenses/${pkgname}/LICENSE
 }
