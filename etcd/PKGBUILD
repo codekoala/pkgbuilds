@@ -3,7 +3,7 @@
 
 pkgname=etcd
 pkgver=0.3.0
-pkgrel=2
+pkgrel=3
 pkgdesc="A highly-available key value store for shared configuration and service discovery"
 arch=('x86_64' 'i686')
 url="http://coreos.com/docs/etcd/"
@@ -14,11 +14,14 @@ source=(
    "${pkgname}::git://github.com/coreos/etcd.git#tag=v${pkgver}"
    "${pkgname}ctl::git://github.com/coreos/etcdctl.git#tag=v${pkgver}"
    "./etcd.service"
+   "./etcd.conf"
 )
 install=etcd.install
+backup=('etc/conf.d/etcd')
 sha256sums=('SKIP'
             'SKIP'
-            '549f1984e35852459d982f827a90d09896b993c28287de97b5cfbf509cecb55e')
+            'a46b131063130750fae71352ce64e3cfb071e218ef77864cfd92223eb4d7f780'
+            '514e6ab46330a376499e78f45eb65897ac44cf87c5ae62269f159939a74662ac')
 
 build() {
   cd "$srcdir/$pkgname/"
@@ -29,6 +32,9 @@ build() {
 }
 
 package() {
+  # install configuration file
+  install -Dm644 "${srcdir}/etcd.conf" "${pkgdir}/etc/conf.d/etcd"
+
   # make data directory
   install -dm755 "${pkgdir}/var/lib/etcd"
 
