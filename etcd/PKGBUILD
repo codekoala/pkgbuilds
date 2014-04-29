@@ -20,7 +20,7 @@ install=etcd.install
 backup=('etc/conf.d/etcd')
 sha256sums=('SKIP'
             'SKIP'
-            'a46b131063130750fae71352ce64e3cfb071e218ef77864cfd92223eb4d7f780'
+            'dd0e76e58da1fe99c4ad3739f06e70fb0acfad8d4725d581b7e76acd57e8fef8'
             '514e6ab46330a376499e78f45eb65897ac44cf87c5ae62269f159939a74662ac')
 
 build() {

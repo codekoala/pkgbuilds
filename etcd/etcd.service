@@ -9,3 +9,6 @@ EnvironmentFile=-/etc/conf.d/etcd
 ExecStart=/usr/bin/etcd
 Restart=always
 RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target
